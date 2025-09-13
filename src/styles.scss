@@ -1,0 +1,155 @@
+/* You can add global styles to this file, and also import other style files */
+
+// Global reset and base styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--background-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+// Smooth scrolling
+html {
+  scroll-behavior: smooth;
+}
+
+// Custom CSS variables for theming inspired by Sketch.com
+:root {
+  --primary-color: #007aff;
+  --secondary-color: #5ac8fa;
+  --accent-color: #ff3b30;
+  --text-primary: #1d1d1f;
+  --text-secondary: #86868b;
+  --background-primary: #ffffff;
+  --background-secondary: #f5f5f7;
+  --border-color: #d2d2d7;
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.2);
+  --border-radius: 8px;
+  --border-radius-large: 16px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  // Default card variables
+  --card-background: #ffffff;
+  --card-hover: #f5f5f7;
+}
+
+// Light theme (default)
+.light-theme {
+  --text-primary: #1d1d1f;
+  --text-secondary: #86868b;
+  --background-primary: #ffffff;
+  --background-secondary: #f5f5f7;
+  --border-color: #d2d2d7;
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.2);
+  
+  // Card backgrounds for light theme
+  --card-background: #ffffff;
+  --card-hover: #f5f5f7;
+}
+
+// Dark theme
+.dark-theme {
+  --text-primary: #f5f5f7;
+  --text-secondary: #a1a1a6;
+  --background-primary: #1d1d1f;
+  --background-secondary: #2c2c2e;
+  --border-color: #48484a;
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.5);
+  
+  // Card backgrounds for dark theme
+  --card-background: #2c2c2e;
+  --card-hover: #3a3a3c;
+}
+
+// Dark theme support (legacy - now handled by classes)
+@media (prefers-color-scheme: dark) {
+  :root:not(.light-theme) {
+    --text-primary: #f5f5f7;
+    --text-secondary: #a1a1a6;
+    --background-primary: #1d1d1f;
+    --background-secondary: #2c2c2e;
+    --border-color: #48484a;
+    --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+}
+
+// Utility classes
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  
+  @media (max-width: 768px) {
+    padding: 0 15px;
+  }
+  
+  @media (max-width: 576px) {
+    padding: 0 10px;
+  }
+}
+
+.section {
+  padding: 80px 0;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mb-4 {
+  margin-bottom: 2rem;
+}
+
+.mt-4 {
+  margin-top: 2rem;
+}
+
+// Animation utilities
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: var(--transition);
+  
+  &.animate {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: var(--transition);
+  
+  &.animate {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-right {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: var(--transition);
+  
+  &.animate {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

@@ -1,0 +1,248 @@
+<section id="projects" class="projects" [class.projects--visible]="isVisible()">
+  <div class="container">
+    <!-- Section Header -->
+    <div class="projects__header">
+      <h2 class="section__title">My Projects</h2>
+      <p class="section__subtitle">A showcase of my recent work and contributions</p>
+    </div>
+
+    <!-- Project Statistics -->
+    <div class="projects__stats">
+      <div class="stats__grid">
+        <div class="stat__card">
+          <div class="stat__icon">🎯</div>
+          <div class="stat__number">{{ projectStats().total }}</div>
+          <div class="stat__label">Total Projects</div>
+        </div>
+        <div class="stat__card">
+          <div class="stat__icon">✅</div>
+          <div class="stat__number">{{ projectStats().completed }}</div>
+          <div class="stat__label">Completed</div>
+        </div>
+        <div class="stat__card">
+          <div class="stat__icon">🚀</div>
+          <div class="stat__number">{{ projectStats().inProgress }}</div>
+          <div class="stat__label">In Progress</div>
+        </div>
+        <div class="stat__card">
+          <div class="stat__icon">📋</div>
+          <div class="stat__number">{{ projectStats().planned }}</div>
+          <div class="stat__label">Planned</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="projects__filter">
+      <div class="filter__tabs">
+        <button
+          class="filter__tab"
+          *ngFor="let category of categories()"
+          [class.filter__tab--active]="selectedCategory() === category.value"
+          (click)="selectCategory(category.value)"
+          type="button"
+        >
+          <span class="tab__text">{{ category.name }}</span>
+          <span class="tab__count">{{ category.count }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Featured Projects -->
+    <div class="projects__featured" *ngIf="selectedCategory() === 'all'">
+      <h3 class="featured__title">Featured Projects</h3>
+      <div class="featured__grid">
+        <div
+          class="project__card project__card--featured"
+          *ngFor="let project of featuredProjects(); let i = index"
+          [style.animation-delay]="(i * 0.1) + 's'"
+          (click)="openProject(project)"
+        >
+          <div class="card__image">
+            <div class="image__placeholder">
+              <span class="placeholder__icon">🚀</span>
+            </div>
+            <div class="card__status" [style.background-color]="getStatusColor(project.status)">
+              {{ getStatusText(project.status) }}
+            </div>
+          </div>
+          
+          <div class="card__content">
+            <h4 class="card__title">{{ project.title }}</h4>
+            <p class="card__description">{{ project.description }}</p>
+            
+            <div class="card__technologies">
+              <span 
+                class="tech__tag" 
+                *ngFor="let tech of project.technologies.slice(0, 3)"
+              >
+                {{ tech }}
+              </span>
+              <span class="tech__more" *ngIf="project.technologies.length > 3">
+                +{{ project.technologies.length - 3 }} more
+              </span>
+            </div>
+            
+            <div class="card__actions">
+              <button class="btn btn--primary btn--small" type="button">
+                View Details
+              </button>
+              <a 
+                *ngIf="project.demoUrl" 
+                [href]="project.demoUrl" 
+                target="_blank" 
+                class="btn btn--outline btn--small"
+              >
+                Live Demo
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- All Projects Grid -->
+    <div class="projects__grid">
+      <div
+        class="project__card"
+        *ngFor="let project of filteredProjects(); let i = index"
+        [style.animation-delay]="(i * 0.1) + 's'"
+        (click)="openProject(project)"
+      >
+        <div class="card__image">
+          <div class="image__placeholder">
+            <span class="placeholder__icon">💻</span>
+          </div>
+          <div class="card__status" [style.background-color]="getStatusColor(project.status)">
+            {{ getStatusText(project.status) }}
+          </div>
+        </div>
+        
+        <div class="card__content">
+          <div class="card__header">
+            <h4 class="card__title">{{ project.title }}</h4>
+            <span class="card__category">{{ project.category }}</span>
+          </div>
+          
+          <p class="card__description">{{ project.description }}</p>
+          
+          <div class="card__technologies">
+            <span 
+              class="tech__tag" 
+              *ngFor="let tech of project.technologies.slice(0, 4)"
+            >
+              {{ tech }}
+            </span>
+          </div>
+          
+          <div class="card__footer">
+            <div class="card__dates">
+              <span class="date__text">{{ project.startDate | date:'MMM yyyy' }}</span>
+              <span *ngIf="project.endDate"> - {{ project.endDate | date:'MMM yyyy' }}</span>
+            </div>
+            
+            <div class="card__links">
+              <a 
+                *ngIf="project.githubUrl" 
+                [href]="project.githubUrl" 
+                target="_blank" 
+                class="link__icon"
+                title="View on GitHub"
+              >
+                🔗
+              </a>
+              <a 
+                *ngIf="project.demoUrl" 
+                [href]="project.demoUrl" 
+                target="_blank" 
+                class="link__icon"
+                title="Live Demo"
+              >
+                🚀
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Projects Message -->
+    <div class="projects__empty" *ngIf="filteredProjects().length === 0">
+      <div class="empty__content">
+        <span class="empty__icon">📋</span>
+        <h3 class="empty__title">No projects found</h3>
+        <p class="empty__description">
+          No projects match the selected category. Try selecting a different category.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project Detail Modal -->
+  <div class="project__modal" *ngIf="selectedProject()" (click)="closeProject()">
+    <div class="modal__content" (click)="$event.stopPropagation()">
+      <button class="modal__close" (click)="closeProject()" type="button">×</button>
+      
+      <div class="modal__header">
+        <h3 class="modal__title">{{ selectedProject()?.title }}</h3>
+        <div class="modal__status" [style.background-color]="getStatusColor(selectedProject()!.status)">
+          {{ getStatusText(selectedProject()!.status) }}
+        </div>
+      </div>
+      
+      <div class="modal__body">
+        <div class="modal__image">
+          <div class="image__placeholder">
+            <span class="placeholder__icon">🚀</span>
+          </div>
+        </div>
+        
+        <div class="modal__details">
+          <p class="modal__description">{{ selectedProject()?.longDescription }}</p>
+          
+          <div class="modal__technologies">
+            <h4>Technologies Used</h4>
+            <div class="tech__list">
+              <span 
+                class="tech__tag" 
+                *ngFor="let tech of selectedProject()?.technologies"
+              >
+                {{ tech }}
+              </span>
+            </div>
+          </div>
+          
+          <div class="modal__metadata">
+            <div class="metadata__item">
+              <strong>Category:</strong> {{ selectedProject()?.category }}
+            </div>
+            <div class="metadata__item">
+              <strong>Duration:</strong> 
+              {{ selectedProject()?.startDate | date:'MMM yyyy' }}
+              <span *ngIf="selectedProject()?.endDate"> - {{ selectedProject()?.endDate | date:'MMM yyyy' }}</span>
+            </div>
+          </div>
+          
+          <div class="modal__actions">
+            <a 
+              *ngIf="selectedProject()?.demoUrl" 
+              [href]="selectedProject()?.demoUrl" 
+              target="_blank" 
+              class="btn btn--primary"
+            >
+              View Live Demo
+            </a>
+            <a 
+              *ngIf="selectedProject()?.githubUrl" 
+              [href]="selectedProject()?.githubUrl" 
+              target="_blank" 
+              class="btn btn--outline"
+            >
+              View Code
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,112 @@
+<section id="about" class="about" [ngClass]="animationClasses()">
+  <div class="container">
+    <!-- Section Header -->
+    <div class="about__header">
+      <h2 class="section__title">{{ aboutInfo.title }}</h2>
+      <p class="section__subtitle">{{ aboutInfo.subtitle }}</p>
+    </div>
+
+    <div class="about__content">
+      <!-- Left Column: Personal Story -->
+      <div class="about__story">
+        <div class="story__text">
+          <p class="story__description">{{ aboutInfo.description }}</p>
+          
+          <ul class="story__highlights">
+            <li 
+              class="highlight__item" 
+              *ngFor="let highlight of aboutInfo.highlights; let i = index"
+              [style.animation-delay]="(i * 0.1) + 's'"
+            >
+              <span class="highlight__marker">✓</span>
+              <span class="highlight__text">{{ highlight }}</span>
+            </li>
+          </ul>
+
+          <div class="story__action">
+            <button 
+              class="btn btn--primary"
+              type="button"
+              (click)="downloadResume()"
+            >
+              <span class="btn__text">Download Resume</span>
+              <i class="btn__icon">📄</i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Experience Stats -->
+        <div class="about__stats">
+          <div class="stats__grid">
+            <div class="stat__item">
+              <div class="stat__number">{{ aboutInfo.experience.years }}</div>
+              <div class="stat__label">Years Experience</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__number">{{ aboutInfo.experience.projects }}</div>
+              <div class="stat__label">Projects Completed</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__number">{{ aboutInfo.experience.clients }}</div>
+              <div class="stat__label">Happy Clients</div>
+            </div>
+            <div class="stat__item">
+              <div class="stat__number">{{ aboutInfo.experience.technologies }}</div>
+              <div class="stat__label">Technologies</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Values & Image -->
+      <div class="about__visual">
+        <div class="visual__image">
+          <div class="image__container">
+            <!-- Professional image placeholder -->
+            <div class="image__placeholder">
+              <div class="placeholder__content">
+                <span class="placeholder__icon">👨‍💻</span>
+              </div>
+            </div>
+            
+            <!-- Decorative elements -->
+            <div class="image__decoration">
+              <div class="decoration__shape decoration__shape--1"></div>
+              <div class="decoration__shape decoration__shape--2"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Core Values -->
+        <div class="about__values">
+          <h3 class="values__title">Core Values</h3>
+          <div class="values__grid">
+            <div 
+              class="value__item" 
+              *ngFor="let value of aboutInfo.values; let i = index"
+              [style.animation-delay]="(i * 0.15) + 's'"
+            >
+              <div class="value__icon">{{ value.icon }}</div>
+              <div class="value__content">
+                <h4 class="value__title">{{ value.title }}</h4>
+                <p class="value__description">{{ value.description }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Timeline (Future Enhancement) -->
+    <div class="about__timeline">
+      <h3 class="timeline__title">My Journey</h3>
+      <div class="timeline__container">
+        <div class="timeline__line"></div>
+        <!-- Timeline items will be dynamically added -->
+        <div class="timeline__message">
+          <p>🚀 Detailed timeline coming soon with interactive milestones!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

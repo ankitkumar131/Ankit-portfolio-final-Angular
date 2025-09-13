@@ -1,0 +1,52 @@
+<header class="header" [ngClass]="headerClasses()">
+  <div class="container">
+    <nav class="header__nav">
+      <!-- Logo -->
+      <div class="header__logo">
+        <a href="#home" (click)="scrollToSection('home'); $event.preventDefault()">
+          <span class="logo__text">Ankit Kumar</span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <ul class="header__menu header__menu--desktop">
+        <li class="menu__item" *ngFor="let item of navItems">
+          <a 
+            class="menu__link"
+            [href]="item.href"
+            (click)="scrollToSection(item.anchor); $event.preventDefault()"
+          >
+            {{ item.label }}
+          </a>
+        </li>
+      </ul>
+
+      <!-- Mobile Menu Toggle -->
+      <button 
+        class="header__toggle"
+        type="button"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="isMenuOpen()"
+        aria-label="Toggle navigation menu"
+      >
+        <span class="toggle__line"></span>
+        <span class="toggle__line"></span>
+        <span class="toggle__line"></span>
+      </button>
+
+      <!-- Mobile Navigation -->
+      <div class="header__menu-overlay" *ngIf="isMenuOpen()" (click)="closeMenu()"></div>
+      <ul class="header__menu header__menu--mobile mobile-menu-right" *ngIf="isMenuOpen()">
+        <li class="menu__item" *ngFor="let item of navItems">
+          <a 
+            class="menu__link"
+            [href]="item.href"
+            (click)="scrollToSection(item.anchor); $event.preventDefault()"
+          >
+            {{ item.label }}
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>

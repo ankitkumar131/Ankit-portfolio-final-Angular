@@ -1,0 +1,200 @@
+<section id="skills" class="skills" [class.skills--visible]="isVisible()">
+  <div class="container">
+    <!-- Section Header -->
+    <div class="skills__header">
+      <h2 class="section__title">Skills & Expertise</h2>
+      <p class="section__subtitle">Technologies I work with</p>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="skills__filter">
+      <div class="filter__tabs">
+        <button
+          class="filter__tab"
+          *ngFor="let option of categoryOptions()"
+          [class.filter__tab--active]="selectedCategory() === option.value"
+          (click)="selectCategory(option.value)"
+          type="button"
+        >
+          <span class="tab__icon">{{ option.icon }}</span>
+          <span class="tab__text">{{ option.name }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Skills Grid -->
+    <div class="skills__grid" *ngIf="selectedCategory() === 'all'">
+      <div
+        class="skill-category"
+        *ngFor="let category of skillCategories; let i = index"
+        [style.animation-delay]="(i * 0.1) + 's'"
+      >
+        <div class="category__header">
+          <div class="category__icon" [style.color]="category.color">{{ category.icon }}</div>
+          <h3 class="category__title">{{ category.name }}</h3>
+        </div>
+        
+        <div class="category__skills">
+          <div
+            class="skill__item"
+            [class.skill__item--expanded]="isSkillExpanded(skill.name)"
+            [class.skill__item--hovered]="isSkillHovered(skill.name)"
+            *ngFor="let skill of category.skills; let j = index"
+            [style.animation-delay]="((i * category.skills.length + j) * 0.05) + 's'"
+            (click)="toggleSkillExpansion(skill.name)"
+            (mouseenter)="setHoveredSkill(skill.name)"
+            (mouseleave)="setHoveredSkill(null)"
+          >
+            <div class="skill__header">
+              <div class="skill__info">
+                <div class="skill__icon">{{ skill.icon }}</div>
+                <div class="skill__details">
+                  <h4 class="skill__name">{{ skill.name }}</h4>
+                  <p class="skill__level-text">{{ getSkillLevelText(skill.level) }}</p>
+                </div>
+              </div>
+              <div class="skill__actions">
+                <div class="skill__percentage">{{ skill.level }}%</div>
+                <button class="skill__expand-btn" type="button">
+                  <span class="expand-icon">{{ isSkillExpanded(skill.name) ? '▼' : '▶' }}</span>
+                </button>
+              </div>
+            </div>
+            
+            <div class="skill__progress">
+              <div
+                class="skill__progress-fill"
+                [style.width.%]="skill.level"
+                [style.background-color]="category.color"
+              ></div>
+            </div>
+            
+            <div class="skill__meta">
+              <span class="skill__experience">{{ skill.yearsOfExperience }} years</span>
+              <p class="skill__description">{{ skill.description }}</p>
+            </div>
+            
+            <!-- Expanded Details -->
+            <div class="skill__expanded" *ngIf="isSkillExpanded(skill.name)">
+              <div class="expanded__content">
+                <h5 class="expanded__title">💡 What I can do with {{ skill.name }}:</h5>
+                <ul class="expanded__capabilities">
+                  <li *ngFor="let capability of getSkillCapabilities(skill.name)">
+                    <span class="capability__icon">✨</span>
+                    {{ capability }}
+                  </li>
+                </ul>
+                
+                <div class="expanded__projects">
+                  <h6 class="projects__title">🚀 Projects using {{ skill.name }}:</h6>
+                  <div class="projects__list">
+                    <span 
+                      class="project__tag" 
+                      *ngFor="let project of getRelatedProjects(skill.name)"
+                    >
+                      {{ project }}
+                    </span>
+                  </div>
+                </div>
+                
+                <div class="expanded__stats">
+                  <div class="stat__item">
+                    <span class="stat__label">Proficiency:</span>
+                    <div class="stat__bar">
+                      <div 
+                        class="stat__fill" 
+                        [style.width.%]="skill.level"
+                        [style.background-color]="category.color"
+                      ></div>
+                    </div>
+                  </div>
+                  <div class="stat__item">
+                    <span class="stat__label">Learning since:</span>
+                    <span class="stat__value">{{ getStartYear(skill.yearsOfExperience) }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtered Skills List -->
+    <div class="skills__list" *ngIf="selectedCategory() !== 'all'">
+      <div class="skills__grid-filtered">
+        <div
+          class="skill__card"
+          *ngFor="let skill of filteredSkills(); let i = index"
+          [style.animation-delay]="(i * 0.1) + 's'"
+        >
+          <div class="card__header">
+            <div class="card__icon" [style.background-color]="getCategoryColor(skill.name)">
+              {{ skill.icon }}
+            </div>
+            <div class="card__info">
+              <h4 class="card__title">{{ skill.name }}</h4>
+              <span class="card__level">{{ getSkillLevelText(skill.level) }}</span>
+            </div>
+            <div class="card__percentage">{{ skill.level }}%</div>
+          </div>
+          
+          <div class="card__progress">
+            <div
+              class="card__progress-fill"
+              [style.width.%]="skill.level"
+              [style.background-color]="getCategoryColor(skill.name)"
+            ></div>
+          </div>
+          
+          <div class="card__content">
+            <p class="card__description">{{ skill.description }}</p>
+            <div class="card__meta">
+              <span class="card__experience">
+                <i class="meta__icon">⏱️</i>
+                {{ skill.yearsOfExperience }} years experience
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills Summary -->
+    <div class="skills__summary">
+      <div class="summary__stats">
+        <div class="summary__stat">
+          <div class="stat__icon">🎯</div>
+          <div class="stat__content">
+            <div class="stat__number">{{ totalSkills() }}</div>
+            <div class="stat__label">Total Skills</div>
+          </div>
+        </div>
+        
+        <div class="summary__stat">
+          <div class="stat__icon">⭐</div>
+          <div class="stat__content">
+            <div class="stat__number">{{ totalCategories() }}</div>
+            <div class="stat__label">Categories</div>
+          </div>
+        </div>
+        
+        <div class="summary__stat">
+          <div class="stat__icon">📈</div>
+          <div class="stat__content">
+            <div class="stat__number">{{ averageProficiency() }}%</div>
+            <div class="stat__label">Avg. Proficiency</div>
+          </div>
+        </div>
+        
+        <div class="summary__stat">
+          <div class="stat__icon">🏆</div>
+          <div class="stat__content">
+            <div class="stat__number">{{ expertSkills() }}</div>
+            <div class="stat__label">Expert Level</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,51 @@
+<div class="fab-container" [class.fab-container--expanded]="isExpanded()">
+  <!-- Main FAB Button -->
+  <button 
+    class="fab-main"
+    [class.fab-main--expanded]="isExpanded()"
+    [class.fab-main--hovered]="isHovered()"
+    (click)="toggleFAB()"
+    (mouseenter)="setHovered(true)"
+    (mouseleave)="setHovered(false)"
+    type="button"
+    [attr.aria-label]="isExpanded() ? 'Close quick actions' : 'Open quick actions'"
+  >
+    <span class="fab-main__icon">{{ mainIcon() }}</span>
+    <div class="fab-main__pulse" *ngIf="!isExpanded()"></div>
+  </button>
+
+  <!-- FAB Actions Menu -->
+  <div class="fab-menu" [class.fab-menu--visible]="isExpanded()">
+    <div
+      class="fab-action"
+      *ngFor="let action of fabActions(); let i = index"
+      [style.animation-delay]="(i * 0.05) + 's'"
+      [style.--action-color]="action.color"
+      (click)="action.action()"
+    >
+      <div class="fab-action__label">{{ action.label }}</div>
+      <button 
+        class="fab-action__button"
+        type="button"
+        [attr.aria-label]="action.label"
+      >
+        <span class="fab-action__icon">{{ action.icon }}</span>
+      </button>
+      <div class="fab-action__tooltip">{{ action.label }}</div>
+    </div>
+  </div>
+
+  <!-- Background Overlay -->
+  <div 
+    class="fab-overlay"
+    [class.fab-overlay--visible]="isExpanded()"
+    (click)="closeFAB()"
+  ></div>
+</div>
+
+<!-- Floating Hints -->
+<div class="floating-hints">
+  <div class="hint hint--bounce" style="--delay: 2s">
+    👆 Try clicking me!
+  </div>
+</div>

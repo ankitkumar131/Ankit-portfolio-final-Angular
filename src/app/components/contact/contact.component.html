@@ -1,0 +1,241 @@
+<section id="contact" class="contact" [class.contact--visible]="isVisible()">
+  <div class="container">
+    <!-- Section Header -->
+    <div class="contact__header">
+      <h2 class="section__title">Get In Touch</h2>
+      <p class="section__subtitle">Let's work together to bring your ideas to life</p>
+    </div>
+
+    <div class="contact__content">
+      <!-- Contact Info -->
+      <div class="contact__info">
+        <div class="info__card">
+          <h3 class="info__title">Let's Connect</h3>
+          <p class="info__description">
+            I'm always open to discussing new opportunities, interesting projects, 
+            or just having a chat about technology and development.
+          </p>
+
+          <div class="info__details">
+            <div class="detail__item">
+              <div class="detail__icon">📧</div>
+              <div class="detail__content">
+                <span class="detail__label">Email</span>
+                <a 
+                  [href]="'mailto:' + contactInfo.email" 
+                  class="detail__value detail__value--link"
+                  (click)="copyToClipboard(contactInfo.email)"
+                >
+                  {{ contactInfo.email }}
+                </a>
+              </div>
+            </div>
+
+            <div class="detail__item">
+              <div class="detail__icon">📱</div>
+              <div class="detail__content">
+                <span class="detail__label">Phone</span>
+                <a 
+                  [href]="'tel:' + contactInfo.phone" 
+                  class="detail__value detail__value--link"
+                >
+                  {{ contactInfo.phone }}
+                </a>
+              </div>
+            </div>
+
+            <div class="detail__item">
+              <div class="detail__icon">📍</div>
+              <div class="detail__content">
+                <span class="detail__label">Location</span>
+                <span class="detail__value">{{ contactInfo.location }}</span>
+              </div>
+            </div>
+
+            <div class="detail__item">
+              <div class="detail__icon">💼</div>
+              <div class="detail__content">
+                <span class="detail__label">Status</span>
+                <span class="detail__value detail__value--status">{{ contactInfo.availability }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Links -->
+          <div class="info__social">
+            <h4 class="social__title">Follow Me</h4>
+            <div class="social__links">
+              <button
+                class="social__link"
+                *ngFor="let social of socialLinks; let i = index"
+                [style.animation-delay]="(i * 0.1) + 's'"
+                [style.background-color]="social.color"
+                (click)="openSocialLink(social.url)"
+                [title]="social.name"
+                type="button"
+              >
+                <span class="social__icon">{{ social.icon }}</span>
+                <span class="social__name">{{ social.name }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="contact__form">
+        <div class="form__card">
+          <h3 class="form__title">Send Me a Message</h3>
+          <p class="form__description">
+            Have a project in mind? Let's discuss how we can work together.
+          </p>
+
+          <!-- Success Message -->
+          <div class="form__success" *ngIf="submitSuccess()">
+            <div class="success__icon">✅</div>
+            <h4 class="success__title">Message Sent Successfully!</h4>
+            <p class="success__text">
+              Thank you for reaching out. I'll get back to you within 24 hours.
+            </p>
+          </div>
+
+          <!-- Error Message -->
+          <div class="form__error" *ngIf="submitError()">
+            <div class="error__icon">❌</div>
+            <p class="error__text">{{ submitError() }}</p>
+          </div>
+
+          <!-- Contact Form -->
+          <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact__form-element">
+            <div class="form__row">
+              <div class="form__group">
+                <label for="name" class="form__label">Full Name *</label>
+                <input
+                  type="text"
+                  id="name"
+                  formControlName="name"
+                  class="form__input"
+                  [class.form__input--error]="getFieldError('name')"
+                  placeholder="Enter your full name"
+                />
+                <div class="form__error-message" *ngIf="getFieldError('name')">
+                  {{ getFieldError('name') }}
+                </div>
+              </div>
+
+              <div class="form__group">
+                <label for="email" class="form__label">Email Address *</label>
+                <input
+                  type="email"
+                  id="email"
+                  formControlName="email"
+                  class="form__input"
+                  [class.form__input--error]="getFieldError('email')"
+                  placeholder="Enter your email address"
+                />
+                <div class="form__error-message" *ngIf="getFieldError('email')">
+                  {{ getFieldError('email') }}
+                </div>
+              </div>
+            </div>
+
+            <div class="form__group">
+              <label for="subject" class="form__label">Subject *</label>
+              <input
+                type="text"
+                id="subject"
+                formControlName="subject"
+                class="form__input"
+                [class.form__input--error]="getFieldError('subject')"
+                placeholder="What's this about?"
+              />
+              <div class="form__error-message" *ngIf="getFieldError('subject')">
+                {{ getFieldError('subject') }}
+              </div>
+            </div>
+
+            <div class="form__group">
+              <label for="message" class="form__label">Message *</label>
+              <textarea
+                id="message"
+                formControlName="message"
+                class="form__textarea"
+                [class.form__input--error]="getFieldError('message')"
+                placeholder="Tell me about your project or how I can help you..."
+                rows="6"
+              ></textarea>
+              <div class="form__error-message" *ngIf="getFieldError('message')">
+                {{ getFieldError('message') }}
+              </div>
+            </div>
+
+            <div class="form__actions">
+              <button
+                type="submit"
+                class="btn btn--primary btn--large"
+                [disabled]="isSubmitting()"
+                [class.btn--loading]="isSubmitting()"
+              >
+                <span class="btn__text" *ngIf="!isSubmitting()">Send Message</span>
+                <span class="btn__text" *ngIf="isSubmitting()">Sending...</span>
+                <div class="btn__loader" *ngIf="isSubmitting()"></div>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Contact Actions -->
+    <div class="contact__quick-actions">
+      <h3 class="quick-actions__title">Quick Actions</h3>
+      <div class="quick-actions__grid">
+        <a 
+          [href]="'mailto:' + contactInfo.email" 
+          class="quick-action__card"
+        >
+          <div class="quick-action__icon">📧</div>
+          <h4 class="quick-action__title">Email Me</h4>
+          <p class="quick-action__description">Send me an email directly</p>
+        </a>
+
+        <a 
+          href="https://www.linkedin.com/in/ankit-kumar-510387270/" 
+          target="_blank" 
+          class="quick-action__card"
+        >
+          <div class="quick-action__icon">💼</div>
+          <h4 class="quick-action__title">LinkedIn</h4>
+          <p class="quick-action__description">Connect with me professionally</p>
+        </a>
+
+        <a 
+          [href]="'tel:' + contactInfo.phone" 
+          class="quick-action__card"
+        >
+          <div class="quick-action__icon">📱</div>
+          <h4 class="quick-action__title">Call Me</h4>
+          <p class="quick-action__description">Let's have a quick chat</p>
+        </a>
+
+        <button 
+          class="quick-action__card quick-action__card--button" 
+          (click)="copyToClipboard(contactInfo.email)"
+          type="button"
+        >
+          <div class="quick-action__icon">📋</div>
+          <h4 class="quick-action__title">Copy Email</h4>
+          <p class="quick-action__description">Copy email to clipboard</p>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" [class.toast--visible]="showToast()" *ngIf="showToast()">
+    <div class="toast__content">
+      <div class="toast__icon">✓</div>
+      <span class="toast__message">{{ toastMessage() }}</span>
+    </div>
+  </div>
+</section>

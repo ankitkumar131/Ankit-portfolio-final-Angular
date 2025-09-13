@@ -1,0 +1,203 @@
+<section id="certifications" class="certifications" [class.certifications--visible]="isVisible()">
+  <div class="container">
+    <!-- Section Header -->
+    <div class="certifications__header">
+      <h2 class="section__title">Certifications</h2>
+      <p class="section__subtitle">Professional certifications and continuous learning achievements</p>
+    </div>
+
+    <!-- Certification Statistics -->
+    <div class="certifications__stats">
+      <div class="stats__grid">
+        <div class="stat__card">
+          <div class="stat__icon">📜</div>
+          <div class="stat__number">{{ certificationStats().total }}</div>
+          <div class="stat__label">Total Certifications</div>
+        </div>
+        <div class="stat__card">
+          <div class="stat__icon">✅</div>
+          <div class="stat__number">{{ certificationStats().verified }}</div>
+          <div class="stat__label">Verified</div>
+        </div>
+        <div class="stat__card">
+          <div class="stat__icon">🏷️</div>
+          <div class="stat__number">{{ certificationStats().categories }}</div>
+          <div class="stat__label">Categories</div>
+        </div>
+        <div class="stat__card">
+          <div class="stat__icon">📅</div>
+          <div class="stat__number">{{ certificationStats().latestYear }}</div>
+          <div class="stat__label">Latest Year</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="certifications__filter">
+      <div class="filter__tabs">
+        <button
+          class="filter__tab"
+          *ngFor="let category of categories()"
+          [class.filter__tab--active]="selectedCategory() === category.value"
+          (click)="selectCategory(category.value)"
+          type="button"
+        >
+          <span class="tab__icon">{{ getCategoryIcon(category.value === 'all' ? 'all' : category.value) }}</span>
+          <span class="tab__text">{{ category.name }}</span>
+          <span class="tab__count">{{ category.count }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Skills Cloud -->
+    <div class="certifications__skills" *ngIf="selectedCategory() === 'all'">
+      <h3 class="skills__title">Top Skills from Certifications</h3>
+      <div class="skills__cloud">
+        <span 
+          class="skill__tag" 
+          *ngFor="let skill of skillCloud()"
+          [style.--skill-weight]="skill.count"
+        >
+          {{ skill.skill }}
+          <span class="skill__count">{{ skill.count }}</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Certifications Grid -->
+    <div class="certifications__grid">
+      <div
+        class="certification__card"
+        *ngFor="let cert of filteredCertifications(); let i = index"
+        [style.animation-delay]="(i * 0.1) + 's'"
+      >
+        <!-- Card Header -->
+        <div class="card__header">
+          <div class="card__badges">
+            <span class="badge badge--category">
+              {{ getCategoryIcon(cert.category) }} {{ cert.category }}
+            </span>
+            <span 
+              class="badge badge--level" 
+              [style.background-color]="getLevelColor(cert.level)"
+            >
+              {{ cert.level }}
+            </span>
+            <span class="badge badge--verified" *ngIf="cert.verified">
+              ✅ Verified
+            </span>
+          </div>
+          
+          <h4 class="card__title">{{ cert.name }}</h4>
+          <div class="card__issuer">{{ cert.issuer }}</div>
+        </div>
+
+        <!-- Card Content -->
+        <div class="card__content">
+          <p class="card__description">{{ cert.description }}</p>
+          
+          <div class="card__metadata">
+            <div class="metadata__item">
+              <span class="metadata__label">Issued:</span>
+              <span class="metadata__value">{{ cert.issueDate | date:'MMM yyyy' }}</span>
+              <span class="metadata__time">({{ getTimeAgo(cert.issueDate) }})</span>
+            </div>
+            
+            <div class="metadata__item" *ngIf="cert.expiryDate">
+              <span class="metadata__label">Expires:</span>
+              <span 
+                class="metadata__value"
+                [class.metadata__value--expired]="isExpired(cert.expiryDate)"
+              >
+                {{ cert.expiryDate | date:'MMM yyyy' }}
+              </span>
+            </div>
+            
+            <div class="metadata__item" *ngIf="cert.credentialId">
+              <span class="metadata__label">ID:</span>
+              <span class="metadata__value">{{ cert.credentialId }}</span>
+            </div>
+          </div>
+
+          <!-- Skills Section -->
+          <div class="card__skills">
+            <div class="skills__title">Skills Covered</div>
+            <div class="skills__list">
+              <span 
+                class="skill__tag" 
+                *ngFor="let skill of cert.skills"
+              >
+                {{ skill }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Actions -->
+        <div class="card__actions">
+          <button 
+            *ngIf="cert.credentialUrl" 
+            class="btn btn--primary"
+            (click)="openCredential(cert.credentialUrl!)"
+            type="button"
+          >
+            <span class="btn__icon">🔗</span>
+            View Credential
+          </button>
+          
+          <button 
+            class="btn btn--outline"
+            type="button"
+          >
+            <span class="btn__icon">📋</span>
+            Copy Link
+          </button>
+        </div>
+
+        <!-- Card Footer -->
+        <div class="card__footer">
+          <div class="footer__validity" *ngIf="!cert.expiryDate">
+            <span class="validity__icon">♾️</span>
+            <span class="validity__text">No Expiration</span>
+          </div>
+          
+          <div class="footer__validity" *ngIf="cert.expiryDate && !isExpired(cert.expiryDate)">
+            <span class="validity__icon">✅</span>
+            <span class="validity__text">Valid</span>
+          </div>
+          
+          <div class="footer__validity footer__validity--expired" *ngIf="cert.expiryDate && isExpired(cert.expiryDate)">
+            <span class="validity__icon">⚠️</span>
+            <span class="validity__text">Expired</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No Certifications Message -->
+    <div class="certifications__empty" *ngIf="filteredCertifications().length === 0">
+      <div class="empty__content">
+        <span class="empty__icon">📜</span>
+        <h3 class="empty__title">No certifications found</h3>
+        <p class="empty__description">
+          No certifications match the selected category. Try selecting a different category.
+        </p>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="certifications__cta">
+      <div class="cta__content">
+        <h3 class="cta__title">Continuous Learning</h3>
+        <p class="cta__description">
+          I believe in continuous learning and staying updated with the latest technologies. 
+          These certifications represent my commitment to professional growth and excellence.
+        </p>
+        <button class="btn btn--primary btn--large" type="button">
+          <span class="btn__icon">📧</span>
+          Get In Touch
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

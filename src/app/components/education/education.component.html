@@ -1,0 +1,131 @@
+<section id="education" class="education" [class.education--visible]="isVisible()">
+  <div class="container">
+    <!-- Section Header -->
+    <div class="education__header">
+      <h2 class="section__title">Education</h2>
+      <p class="section__subtitle">My academic journey and qualifications</p>
+    </div>
+
+    <!-- Education Statistics -->
+    <div class="education__stats">
+      <div class="stats__grid">
+        <div class="stat__card">
+          <div class="stat__icon">🎓</div>
+          <div class="stat__number">{{ educationStats().total }}</div>
+          <div class="stat__label">Qualifications</div>
+        </div>
+        <div class="stat__card">
+          <div class="stat__icon">✅</div>
+          <div class="stat__number">{{ educationStats().completed }}</div>
+          <div class="stat__label">Completed</div>
+        </div>
+        <div class="stat__card">
+          <div class="stat__icon">📚</div>
+          <div class="stat__number">{{ educationStats().pursuing }}</div>
+          <div class="stat__label">Pursuing</div>
+        </div>
+        <div class="stat__card">
+          <div class="stat__icon">⭐</div>
+          <div class="stat__number">{{ educationStats().avgScore }}%</div>
+          <div class="stat__label">Avg Score</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Education Timeline -->
+    <div class="education__timeline">
+      <div class="timeline__line"></div>
+      <div class="timeline__container">
+        <div
+          class="timeline__item"
+          *ngFor="let education of educationItems; let i = index"
+          [style.animation-delay]="(i * 0.3) + 's'"
+        >
+          <!-- Timeline Point -->
+          <div class="timeline__point">
+            <div class="point__circle" [style.background-color]="getStatusColor(education.status)">
+              <span class="point__icon">{{ getLevelIcon(education.level) }}</span>
+            </div>
+            <div class="point__pulse"></div>
+            <div class="point__year">{{ education.year }}</div>
+          </div>
+
+          <!-- Education Card -->
+          <div class="education__card">
+            <!-- Card Glow Effect -->
+            <div class="card__glow"></div>
+            
+            <div class="card__header">
+              <div class="header__status" [style.background-color]="getStatusColor(education.status)">
+                <span class="status__icon">{{ getStatusIcon(education.status) }}</span>
+                <span class="status__text">{{ getStatusText(education.status) }}</span>
+              </div>
+            </div>
+
+            <div class="card__body">
+              <h3 class="card__degree">{{ education.degree }}</h3>
+              <p class="card__institution">
+                <span class="institution__icon">🏫</span>
+                {{ education.institution }}
+              </p>
+
+              <!-- Enhanced Score Display -->
+              <div class="card__score">
+                <div class="score__circle">
+                  <div class="score__value">
+                    {{ education.score }}{{ education.scoreType === 'percentage' ? '%' : '' }}
+                  </div>
+                  <div class="score__type" *ngIf="education.scoreType === 'cgpa'">
+                    CGPA
+                  </div>
+                </div>
+                <div class="score__label">
+                  {{ education.scoreType === 'percentage' ? 'Percentage' : 'Grade Point Average' }}
+                </div>
+              </div>
+
+              <p class="card__description" *ngIf="education.description">
+                {{ education.description }}
+              </p>
+
+              <div class="card__achievements" *ngIf="education.achievements && education.achievements.length > 0">
+                <h4 class="achievements__title">
+                  <span class="title__icon">🏆</span>
+                  Key Highlights
+                </h4>
+                <ul class="achievements__list">
+                  <li 
+                    class="achievement__item" 
+                    *ngFor="let achievement of education.achievements; let j = index"
+                    [style.animation-delay]="((i * 0.3) + (j * 0.1) + 0.5) + 's'"
+                  >
+                    <span class="achievement__icon">▶</span>
+                    <span class="achievement__text">{{ achievement }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Current Focus -->
+    <div class="education__current" *ngIf="currentEducation().length > 0">
+      <h3 class="current__title">Currently Pursuing</h3>
+      <div class="current__grid">
+        <div
+          class="current__card"
+          *ngFor="let education of currentEducation()"
+        >
+          <div class="current__icon">{{ getLevelIcon(education.level) }}</div>
+          <h4 class="current__degree">{{ education.degree }}</h4>
+          <p class="current__institution">{{ education.institution }}</p>
+          <div class="current__timeline">
+            <span class="timeline__year">{{ education.year }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

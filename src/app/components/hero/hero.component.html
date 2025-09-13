@@ -1,0 +1,128 @@
+<section 
+  id="home" 
+  class="hero" 
+  [class.hero--visible]="isVisible()"
+  [class.hero--interactive]="isMouseOverHero()"
+  (mouseenter)="onHeroMouseEnter()"
+  (mouseleave)="onHeroMouseLeave()"
+>
+  <div class="hero__background">
+    <div class="hero__gradient"></div>
+    <div class="hero__shapes">
+      <div class="shape shape--1"></div>
+      <div class="shape shape--2"></div>
+      <div class="shape shape--3"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="hero__content">
+      <div class="hero__text">
+        <div class="hero__greeting">
+          <span class="greeting__text">Hello, I'm</span>
+        </div>
+        
+        <h1 class="hero__name" (click)="onNameClick()">
+          <span class="name__text" [class.name__text--easter]="showEasterEgg()">{{ personalInfo.name }}</span>
+          <span class="name__click-hint" *ngIf="clickCount() > 0 && clickCount() < 5">
+            {{ 5 - clickCount() }} more clicks for surprise! 🎉
+          </span>
+        </h1>
+        
+        <div class="hero__title">
+          <span class="title__label">I'm a </span>
+          <span class="title__emoji">{{ currentTitleData().emoji }}</span>
+          <span 
+            class="title__animated" 
+            [style.color]="currentTitleData().color"
+          >
+            {{ displayedTitle() }}
+          </span>
+          <span 
+            class="title__cursor" 
+            [class.title__cursor--visible]="showCursor()"
+            [class.title__cursor--typing]="isTyping()"
+          >
+            |  
+          </span>
+        </div>
+        
+        <p class="hero__subtitle">
+          {{ personalInfo.subtitle }}
+        </p>
+
+        <div class="hero__meta">
+          <div class="meta__item">
+            <i class="meta__icon">📍</i>
+            <span class="meta__text">{{ personalInfo.location }}</span>
+          </div>
+          <div class="meta__item">
+            <i class="meta__icon">💼</i>
+            <span class="meta__text">{{ personalInfo.availability }}</span>
+          </div>
+        </div>
+
+        <div class="hero__actions">
+          <button 
+            class="btn btn--primary btn--large"
+            type="button"
+            (click)="scrollToProjects()"
+          >
+            <span class="btn__text">View My Work</span>
+            <i class="btn__icon">→</i>
+          </button>
+          
+          <button 
+            class="btn btn--secondary btn--large"
+            type="button"
+            (click)="scrollToContact()"
+          >
+            <span class="btn__text">Get In Touch</span>
+            <i class="btn__icon">✉</i>
+          </button>
+        </div>
+
+        <div class="hero__cta">
+          <button 
+            class="btn btn--outline"
+            type="button"
+            (click)="downloadResume()"
+          >
+            <span class="btn__text">Download Resume</span>
+            <i class="btn__icon">⬇</i>
+          </button>
+        </div>
+      </div>
+
+      <div class="hero__visual">
+        <div class="visual__container">
+          <div class="visual__image">
+            <div class="image__placeholder">
+              <!-- Profile image will be added here -->
+              <div class="placeholder__content">
+                <span class="placeholder__text">AK</span>
+              </div>
+            </div>
+          </div>
+          <div class="visual__decoration">
+            <div class="decoration__item decoration__item--1"></div>
+            <div class="decoration__item decoration__item--2"></div>
+            <div class="decoration__item decoration__item--3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero__scroll">
+      <button 
+        class="scroll__indicator"
+        type="button"
+        (click)="scrollToProjects()"
+        aria-label="Scroll to next section"
+      >
+        <span class="scroll__text">Scroll to explore</span>
+        <div class="scroll__arrow"></div>
+      </button>
+    </div>
+  </div>
+</section>
