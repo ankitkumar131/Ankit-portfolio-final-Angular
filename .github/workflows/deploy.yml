@@ -31,5 +31,5 @@ jobs:
       if: github.ref == 'refs/heads/main'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist/ankit-portfolio
+        publish_dir: ./dist/ankit-portfolio/browser
         # cname: # Add your custom domain here if you have one
