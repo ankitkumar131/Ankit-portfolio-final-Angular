@@ -4,9 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build ",
-    "watch": "ng build --watch ",
-    "deploy": "ng build "
+    "build": "ng build --base-href /Ankit-portfolio-final-Angular/",
+"watch": "ng build --watch --configuration development",
+"deploy": "ng build --base-href /Ankit-portfolio-final-Angular/ && npx angular-cli-ghpages --dir=dist/ankit-portfolio/browser"
+        
   },
   "prettier": {
     "printWidth": 100,
