@@ -54,7 +54,8 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
-              "preserveSymlinks": true
+              "preserveSymlinks": true,
+              "baseHref": "/"
             }
           },
           "defaultConfiguration": "production"
